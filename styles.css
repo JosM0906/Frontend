@@ -1,0 +1,118 @@
+/* Reset de estilos: Elimina márgenes y rellenos predeterminados en todos los elementos */
+* {
+  margin: 0; /* Elimina márgenes */
+  padding: 0; /* Elimina rellenos */
+  box-sizing: border-box; /* Incluye padding y borde dentro del ancho y alto total del elemento */
+}
+
+/* Variables globales definidas en :root para su uso en todo el documento */
+:root {
+  --index: calc(
+    1vw + 1vh
+  ); /* Tamaño dinámico que se ajusta al tamaño de la ventana */
+  --transition: cubic-bezier(
+    0.1,
+    0.7,
+    0,
+    1
+  ); /* Define la curva de aceleración de las transiciones */
+}
+
+/* Estilos del cuerpo de la página */
+body {
+  background-color: #282a36; /* Color de fondo oscuro */
+}
+
+/* Contenedor principal de los elementos */
+.wrapper {
+  display: flex; /* Usa flexbox para organizar los elementos */
+  align-items: center; /* Centra los elementos verticalmente */
+  justify-content: center; /* Centra los elementos horizontalmente */
+  height: 100vh; /* Hace que el contenedor ocupe toda la altura de la ventana */
+}
+
+/* Contenedor que agrupa todos los elementos */
+.items {
+  display: flex; /* Organiza los elementos en una fila */
+  gap: 0.4rem; /* Espaciado entre los elementos */
+  perspective: calc(
+    var(--index) * 35
+  ); /* Aplica una perspectiva 3D a los elementos */
+}
+
+/* Estilos individuales para cada elemento */
+.item {
+  position: relative; /* Permite usar posicionamiento absoluto en sus elementos hijos */
+  width: calc(
+    var(--index) * 3
+  ); /* Ancho dinámico basado en la variable --index */
+  height: calc(
+    var(--index) * 12
+  ); /* Altura dinámica basada en la variable --index */
+  background-color: #222; /* Color de fondo gris oscuro */
+  background-size: cover; /* Ajusta la imagen de fondo para cubrir completamente el elemento */
+  background-position: center; /* Centra la imagen de fondo */
+  cursor: pointer; /* Cambia el cursor a una mano al pasar sobre el elemento */
+  filter: grayscale(1) brightness(0.5); /* Aplica un filtro de escala de grises y reduce el brillo */
+  /* Definición de transiciones para los efectos de transformación */
+  transition: transform 1.25s var(--transition),
+    /* Transición para la transformación 3D */ filter 3s var(--transition),
+    /* Transición para los cambios de filtro */ width 1.25s var(--transition); /* Transición para los cambios de ancho */
+  will-change: transform, filter, width; /* Indica qué propiedades van a cambiar, optimizando el rendimiento */
+}
+
+/* Añade un retraso en la transición para que los elementos se animen en secuencia */
+.items .item:nth-child(1) {
+  transition-delay: 0s; /* Sin retraso para el primer elemento */
+}
+.items .item:nth-child(2) {
+  transition-delay: 0.2s; /* Retraso de 0.2s */
+}
+.items .item:nth-child(3) {
+  transition-delay: 0.4s; /* Retraso de 0.4s */
+}
+.items .item:nth-child(4) {
+  transition-delay: 0.6s; /* Retraso de 0.6s */
+}
+.items .item:nth-child(5) {
+  transition-delay: 0.8s; /* Retraso de 0.8s */
+}
+
+/* Efecto al pasar el mouse sobre un elemento */
+.items .item:hover {
+  filter: inherit; /* Hereda el filtro original (elimina escala de grises y brillo reducido) */
+  transform: translateZ(calc(var(--index) * 10)) rotateY(-35deg); /*mueve el elementeo hacia adelante en el eje z*/
+}
+
+/* Efecto escalonado para los elementos ubicados a la izquierda del elemento sobre el que se pasa el mouse */
+.items .item:has(+ .item:hover) {
+  filter: inherit; /* Restaura los colores originales */
+  transform: translateZ(calc(var(--index) * 8.5)) rotateY(-35deg); /* Desplaza el elemento hacia adelante y lo rota */
+}
+
+.items .item:has(+ * + .item:hover) {
+  filter: inherit; /*hereda el filtro original*/
+  transform: translateZ(calc(var(--index) * 5.6)) rotateY(-40deg); /* Desplaza y rota un poco más lejos */
+}
+
+.items .item:has(+ * + * + .item:hover) {
+  filter: inherit;
+  transform: translateZ(calc(var(--index) * 2.5)) rotateY(-30deg); /* Menos desplazamiento y rotación */
+}
+
+.items .item:has(+ * + * + * + .item:hover) {
+  filter: inherit;
+  transform: translateZ(calc(var(--index) * 6)) rotateY(-15deg); /* Rotación mínima */
+}
+
+/* Efecto cuando un elemento es activado o recibe el foco */
+.items .item:active,
+.items .item:focus {
+  width: 28vw; /* Aumenta el ancho del elemento */
+  filter: inherit; /* Restaura los colores originales */
+  z-index: 100; /* Coloca el elemento en la parte superior */
+  transform: translateZ(
+    calc(var(--index) * 10)
+  ); /* Mueve el elemento más cerca en el eje Z */
+  margin: 0 0.45vw; /* Agrega un pequeño margen horizontal */
+}
